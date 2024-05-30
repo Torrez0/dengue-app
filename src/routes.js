@@ -3,12 +3,26 @@ import Home from './Screens/Home';
 import Denuncias from './Screens/Denuncias';
 import Perfil from './Screens/Perfil';
 import Cuidados from './Screens/Cuidados';
+import Cadastro from './Screens/Cadastro';
+import Login from './Screens/Login';
 import TEMAS from './estilos/temas';
 import { Ionicons } from '@expo/vector-icons';
 import { Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+function PerfilRoutes() {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Perfil" component={Perfil} />
+            <Stack.Screen name="Cadastro" component={Cadastro}/>
+            <Stack.Screen name="Login" component={Login} />
+        </Stack.Navigator>
+    )
+}
 
 function Routes() {
     return (
@@ -79,7 +93,10 @@ function Routes() {
             <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
             <Tab.Screen name="Cuidados" component={Cuidados} options={{headerShown: false}} />
             <Tab.Screen name="Denuncias" component={Denuncias} options={{headerShown: false}} />
+            {/* <Tab.Screen name="Perfil" component={PerfilRoutes} options={{headerShown: false}} /> */}
             <Tab.Screen name="Perfil" component={Perfil} options={{headerShown: false}} />
+            {/* <Tab.Screen name="Perfil" component={Cadastro} options={{headerShown: false}} /> */}
+             {/* <Tab.Screen name="Perfil" component={Login} options={{headerShown: false}} /> */}
         </Tab.Navigator>
     );
 }

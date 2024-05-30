@@ -3,61 +3,41 @@ import { StyleSheet, Text, View, ScrollView, SafeAreaView, Platform, Image, Touc
 import Home from './Home';
 import { Link, useNavigation } from '@react-navigation/native';
 
-export default function Perfil() {
+export default function Login() {
+  const navigation = useNavigation();
+
   return (
    <SafeAreaView style={styles.container}>
-    <View style={styles.welcomeBar}>
-      <Image 
-        source={require("../../assets/dengue-logo.png")} 
-        style={styles.logo}
-      />
-      <Text style={styles.welcomeText}>
-            Olá, Bruna!
-        </Text>
-    </View>
     <ScrollView>
-      <View style={styles.content}>
-        <Text style={styles.title}>
-            Perfil
-        </Text>
-        <TextInput style={styles.input}
-          placeholder='Nome do usuário'
+    <View style={styles.content}>
+        <Image 
+          source={require("../../assets/dengue-logo.png")} 
+          style={styles.logo}
+        />
+        <TextInput
+          placeholder='Digite o seu e-mail'
+          style={styles.input}
         > 
         </TextInput>
-        <TextInput style={styles.input}
-          placeholder='E-mail cadastrado'
-          editable={false}
-          selectTextOnFocus={false}
+        <TextInput
+          placeholder='Digite a sua senha'
+          style={styles.input}
         > 
         </TextInput>
-        <TextInput style={styles.input}
-          placeholder='Data de nascimento'
-          editable={false}
-          selectTextOnFocus={false}
-        > 
-        </TextInput>
-        <TextInput style={styles.input}
-          placeholder='Número de telefone cadastrado'
-        > 
-        </TextInput>
-        <TextInput style={styles.input}
-          placeholder='Selecione o seu Estado'
-        > 
-        </TextInput>
-       
-
         <Text style={styles.text}>
-          Sair
+          Esqueceu a senha? Clique aqui! 
         </Text>
-
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}> 
-            Suas denúncias 
+            Entrar 
           </Text>
         </TouchableOpacity>
 
         <Text style={styles.text}>
-          Excluir conta
+          Não possui cadastro?  Cadastre-se!
+          {/* <Text style={styles.link} onPress={() => navigation.navigate('Home')} >
+            Cadastre-se!
+          </Text>  */}
         </Text>
       </View>      
     </ScrollView>
@@ -71,43 +51,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#A2C9F0',
     justifyContent: 'center',
     alignItems: 'center',
-    // paddingTop: 100,
+    paddingTop: 100,
   },
   content: {
     alignSelf: 'center',
     flex: 1,
-    width: 350,
+    width: '100%',
     marginTop: 20,
     alignItems: 'center',
-    justifyContent: 'center', 
-    paddingTop: 30,
+    justifyContent: 'center'
   }, 
-  welcomeBar: {
-    backgroundColor: '#308DE9',
-    width: '100%',
-    paddingTop: 35,
-    padding: 10,
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    height: 100,
-  },
-  welcomeText: {
-    fontSize: 30,
-    fontWeight: '500',
-    color: '#FFF',
-    marginLeft: 30
-  },
   logo: {
-    width: 50,
-    height: 50
-  },
-  title: {
-    fontSize: 36,
-    fontWeight: '700',
-    color: '#FFF'
-  },
+    marginBottom: 23,
+  }, 
   input: {
     backgroundColor: '#FFF', 
     borderRadius: 10,
