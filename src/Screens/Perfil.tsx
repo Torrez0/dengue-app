@@ -71,7 +71,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#A2C9F0',
     justifyContent: 'center',
     alignItems: 'center',
-    // paddingTop: 100,
+    width: '100%',
+    height: '100%',
   },
   content: {
     alignSelf: 'center',
@@ -81,6 +82,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center', 
     paddingTop: 30,
+    paddingBottom: 60,
+    paddingHorizontal: 20,
   }, 
   welcomeBar: {
     backgroundColor: '#308DE9',
