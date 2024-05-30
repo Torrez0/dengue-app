@@ -57,6 +57,8 @@ export default function Denuncias() {
      backgroundColor: '#A2C9F0',
      justifyContent: 'center',
      alignItems: 'center',
+     width: '100%',
+     height: '100%',
      // paddingTop: 100,
    },
    content: {
@@ -67,6 +69,8 @@ export default function Denuncias() {
      alignItems: 'center',
      justifyContent: 'center', 
      paddingTop: 50,
+     paddingBottom: 60,
+     paddingHorizontal: 20,
    }, 
    welcomeBar: {
      backgroundColor: '#308DE9',
