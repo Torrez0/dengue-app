@@ -1,11 +1,9 @@
-import { StatusBar, setStatusBarHidden } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
   View,
   ScrollView,
   SafeAreaView,
-  Platform,
   Image,
 } from "react-native";
 

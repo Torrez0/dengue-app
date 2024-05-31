@@ -1,21 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
-type Denuncia = {
-  id: string;
-  rua: string;
-  numero: string;
-  bairro: string;
-  cidade: string;
-  estado: string;
-  data: string;
-  status: string;
-};
-
-type DenunciaCardProps = {
-  denuncia: Denuncia;
-};
+import { DenunciaCardProps } from "../types/DenunciaTypes";
 
 const getStatusStyle = (status: string) => {
   switch (status) {
@@ -69,9 +55,13 @@ const DenunciaCard: React.FC<DenunciaCardProps> = ({ denuncia }) => {
           {"Denúncia " + denuncia.status}
         </Text>
       </View>
-      <View style={{ paddingRight: 10 }}>
-        <Ionicons name={"trash-outline"} size={25} />
-      </View>
+      <TouchableOpacity
+      // onPress={() => navigation.navigate('LINK')}
+      >
+        <View style={{ paddingRight: 10 }}>
+          <Ionicons name={"trash-outline"} size={25} />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
