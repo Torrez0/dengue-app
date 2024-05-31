@@ -9,25 +9,10 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import DenunciaCard from "../components/denunciasCard";
-
-type Denuncia = {
-  id: string;
-  rua: string;
-  numero: string;
-  bairro: string;
-  cidade: string;
-  estado: string;
-  data: string;
-  status: string;
-};
+import { Denuncia } from "../types/DenunciaTypes";
+import DenunciaCard from "../components/DenunciaCard";
 
 export default function Denuncias() {
-
-  let endereco: string = "Rua da Aurora";
-  let data: string = "01/03/2024";
-  let statusDenuncia = "em análise";
-
   const denuncias: Denuncia[] = [
     {
       id: "01",
@@ -50,7 +35,7 @@ export default function Denuncias() {
       status: "em análise",
     },
     {
-      id: "02",
+      id: "03",
       rua: "Rua Benjamin Constant",
       numero: "1456",
       bairro: "Torre",
@@ -60,7 +45,7 @@ export default function Denuncias() {
       status: "negada",
     },
     {
-      id: "02",
+      id: "04",
       rua: "Avenida Rio Branco",
       numero: "1456",
       bairro: "Torre",
@@ -70,33 +55,6 @@ export default function Denuncias() {
       status: "em andamento",
     },
   ];
-
-  // const Denuncias = () => {
-  //   return (
-  //     <View style={styles.denunciasCard}>
-  //       <View style={{ maxWidth: 150, rowGap: 5 }}>
-  //         <Text style={{ fontSize: 14, fontWeight: "700" }}>{endereco}</Text>
-  //         <Text style={{ color: "#959595", fontSize: 12 }}>
-  //           {"Data: " + data}
-  //         </Text>
-  //         <Text
-  //           style={{
-  //             fontSize: 12,
-  //             color: "#4B9AE9",
-  //             backgroundColor: "#98C3ED",
-  //             padding: 5,
-  //             borderRadius: 10,
-  //           }}
-  //         >
-  //           {"Denúncia " + statusDenuncia}
-  //         </Text>
-  //       </View>
-  //       <View style={{ paddingRight: 10 }}>
-  //         <Ionicons name={"trash-outline"} size={25}></Ionicons>
-  //       </View>
-  //     </View>
-  //   );
-  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -123,8 +81,14 @@ export default function Denuncias() {
             style={styles.input}
             placeholder="Descrição / Denúnica"
           ></TextInput>
-
-          <Text style={styles.text}>Anexar evidências</Text>
+          <TouchableOpacity
+          // onPress={() => navigation.navigate('LINK')}
+          >
+            <Text>
+              <Ionicons name="attach" size={18}></Ionicons>
+              Cadastre-se!
+            </Text>
+          </TouchableOpacity>
 
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Enviar</Text>
@@ -132,32 +96,6 @@ export default function Denuncias() {
 
           <View style={styles.denunciasBox}>
             <Text style={styles.smallTitle}>Suas denúnias</Text>
-
-            {/* <View style={styles.denunciasCard}>
-              <View style={{ maxWidth: 150, rowGap: 5 }}>
-                <Text style={{ fontSize: 14, fontWeight: "700" }}>
-                  {endereco}
-                </Text>
-                <Text style={{ color: "#959595", fontSize: 12 }}>
-                  {"Data: " + data}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: "#4B9AE9",
-                    backgroundColor: "#98C3ED",
-                    padding: 5,
-                    borderRadius: 10,
-                  }}
-                >
-                  {"Denúncia " + statusDenuncia}
-                </Text>
-              </View>
-              <View style={{ paddingRight: 10 }}>
-                <Ionicons name={"trash-outline"} size={25}></Ionicons>
-              </View>
-            </View> */}
-
             {denuncias.map((denuncia) => (
               <DenunciaCard key={denuncia.id} denuncia={denuncia} />
             ))}
@@ -187,7 +125,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 50,
+    paddingTop: 40,
     paddingBottom: 60,
     paddingHorizontal: 20,
   },
