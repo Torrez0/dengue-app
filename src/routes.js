@@ -112,13 +112,13 @@ function Routes() {
         options={{ headerShown: false }}
       />
       {/* <Tab.Screen name="Perfil" component={PerfilRoutes} options={{headerShown: false}} /> */}
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Perfil"
         component={Perfil}
         options={{ headerShown: false }}
-      />
+      /> */}
       {/* <Tab.Screen name="Perfil" component={Cadastro} options={{headerShown: false}} /> */}
-      {/* <Tab.Screen name="Perfil" component={Login} options={{headerShown: false}} /> */}
+      <Tab.Screen name="Perfil" component={Login} options={{headerShown: false}} />
     </Tab.Navigator>
   );
 }

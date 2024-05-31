@@ -1,10 +1,31 @@
 import { StatusBar, setStatusBarHidden } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, SafeAreaView, Platform, Image, TouchableOpacity, TextInput, Linking } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, SafeAreaView, Platform, Image, TouchableOpacity, TextInput, Linking, Alert } from 'react-native';
 import Home from './Home';
 import { Link, useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import { logar } from '../services/requisicoesFirebase';
 
 export default function Login() {
   const navigation = useNavigation();
+
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+
+  async function realizarLogin(){
+    if (email === '' || senha === ''){
+      Alert.alert("Campos vazios", "Verifique se os campos estao preenchidos")
+    } else{
+      const resultado = await logar(email, senha);
+      if (resultado === 'Sucesso!') {
+        setEmail('');
+        setSenha('');
+        Alert.alert('Sucesso!', 'Login realizado com sucesso!')
+      } else {
+        Alert.alert("Nao foi efetuado login", resultado)
+      }
+    }
+
+  }
 
   return (
    <SafeAreaView style={styles.container}>
@@ -17,17 +38,21 @@ export default function Login() {
         <TextInput
           placeholder='Digite o seu e-mail'
           style={styles.input}
+          value={email}
+          onChangeText={email=>setEmail(email)}
         > 
         </TextInput>
         <TextInput
           placeholder='Digite a sua senha'
           style={styles.input}
+          value={senha}
+          onChangeText={senha=>setSenha(senha)}
         > 
         </TextInput>
         <Text style={styles.text}>
           Esqueceu a senha? Clique aqui! 
         </Text>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={()=>realizarLogin()}>
           <Text style={styles.buttonText}> 
             Entrar 
           </Text>
