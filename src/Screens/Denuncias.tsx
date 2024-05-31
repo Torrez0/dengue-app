@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import {
   StyleSheet,
@@ -8,53 +8,114 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { Denuncia } from "../types/DenunciaTypes";
 import DenunciaCard from "../components/DenunciaCard";
+import { useNavigation } from '@react-navigation/native';
+import { PerfilScreenNavigationProp } from "../types/PerfilNavigationTypes";
+import { auth, db } from "../config/firebase";
+import { criarDenuncia, obterIdUsuarioLogado } from "../services/requisicoesFirebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 export default function Denuncias() {
-  const denuncias: Denuncia[] = [
-    {
-      id: "01",
-      rua: "Rua da Aurora",
-      numero: "123",
-      bairro: "Centro",
-      cidade: "Recife",
-      estado: "Pernambuco",
-      data: "02/02/2024",
-      status: "solucionada",
-    },
-    {
-      id: "02",
-      rua: "Rua Benjamin Constant",
-      numero: "1456",
-      bairro: "Torre",
-      cidade: "Recife",
-      estado: "Pernambuco",
-      data: "25/05/2024",
-      status: "em análise",
-    },
-    {
-      id: "03",
-      rua: "Rua Benjamin Constant",
-      numero: "1456",
-      bairro: "Torre",
-      cidade: "Recife",
-      estado: "Pernambuco",
-      data: "25/05/2024",
-      status: "negada",
-    },
-    {
-      id: "04",
-      rua: "Avenida Rio Branco",
-      numero: "1456",
-      bairro: "Torre",
-      cidade: "Recife",
-      estado: "Pernambuco",
-      data: "25/05/2024",
-      status: "em andamento",
-    },
-  ];
+
+  const [estado, setEstado] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [endereco, setEndereco] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [denunciasRealizadas, setDenunciasRealizadas] = useState([]);
+
+  const navigation = useNavigation<PerfilScreenNavigationProp>();
+
+  const buscarDenuncias = async () => {
+    try {
+      const denunciasRef = collection(db, 'denuncias');
+      const q = query(denunciasRef, where('usuario', '==', await obterIdUsuarioLogado()));
+      const querySnapshot = await getDocs(q);
+
+      const denuncias = [];
+      querySnapshot.forEach((doc) => {
+        denuncias.push({ id: doc.id, ...doc.data() });
+      });
+
+      setDenunciasRealizadas(denuncias);
+    } catch (error) {
+      console.error("Erro ao buscar query: ", error);
+    }
+  }
+
+  // const denuncias: Denuncia[] = [
+  //   {
+  //     id: "01",
+  //     rua: "Rua da Aurora",
+  //     numero: "123",
+  //     bairro: "Centro",
+  //     cidade: "Recife",
+  //     estado: "Pernambuco",
+  //     data: "02/02/2024",
+  //     status: "solucionada",
+  //   },
+  //   {
+  //     id: "02",
+  //     rua: "Rua Benjamin Constant",
+  //     numero: "1456",
+  //     bairro: "Torre",
+  //     cidade: "Recife",
+  //     estado: "Pernambuco",
+  //     data: "25/05/2024",
+  //     status: "em análise",
+  //   },
+  //   {
+  //     id: "03",
+  //     rua: "Rua Benjamin Constant",
+  //     numero: "1456",
+  //     bairro: "Torre",
+  //     cidade: "Recife",
+  //     estado: "Pernambuco",
+  //     data: "25/05/2024",
+  //     status: "negada",
+  //   },
+  //   {
+  //     id: "04",
+  //     rua: "Avenida Rio Branco",
+  //     numero: "1456",
+  //     bairro: "Torre",
+  //     cidade: "Recife",
+  //     estado: "Pernambuco",
+  //     data: "25/05/2024",
+  //     status: "em andamento",
+  //   },
+  // ];
+
+  async function realizarDenuncia() {
+
+    if (estado === ('') || cidade === ('') || endereco === ('') || descricao === ('')) {
+      Alert.alert("Campos vazios", "Verifique se os campos estao preenchidos")
+    } else if (await obterIdUsuarioLogado() === 'Nenhum usuário logado.') {
+      Alert.alert('Ops!', 'É preciso estar logado para fazer uma denúncia!')
+    } else {
+
+      const idUsuario = await obterIdUsuarioLogado();
+      const data = '31/05/2024';
+      const resultado = await criarDenuncia(idUsuario, estado, cidade, endereco, descricao, data);
+
+      if (resultado === 'Sucesso!') {
+        setEstado('');
+        setCidade('');
+        setEndereco('');
+        setDescricao('');
+
+        Alert.alert('Sucesso!', 'Denuncia criada!');
+      } else {
+        Alert.alert(resultado);
+      }
+
+    }
+
+  }
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -64,25 +125,29 @@ export default function Denuncias() {
           <TextInput
             style={styles.input}
             placeholder="Selecione o Estado"
+            value={estado}
+            onChangeText={estado => setEstado(estado)}
           ></TextInput>
           <TextInput
             style={styles.input}
             placeholder="Selecione a cidade"
-            editable={false}
-            selectTextOnFocus={false}
+            value={cidade}
+            onChangeText={cidade => setCidade(cidade)}
           ></TextInput>
           <TextInput
             style={styles.input}
             placeholder="Digite o endereço"
-            editable={false}
-            selectTextOnFocus={false}
+            value={endereco}
+            onChangeText={endereco => setEndereco(endereco)}
           ></TextInput>
           <TextInput
             style={styles.input}
             placeholder="Descrição / Denúnica"
+            value={descricao}
+            onChangeText={descricao => setDescricao(descricao)}
           ></TextInput>
           <TouchableOpacity
-          // onPress={() => navigation.navigate('LINK')}
+            onPress={() => navigation.navigate('Cadastro')}
           >
             <Text>
               <Ionicons name="attach" size={18}></Ionicons>
@@ -90,14 +155,17 @@ export default function Denuncias() {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={() => realizarDenuncia()}>
             <Text style={styles.buttonText}>Enviar</Text>
           </TouchableOpacity>
 
           <View style={styles.denunciasBox}>
-            <Text style={styles.smallTitle}>Suas denúnias</Text>
-            {denuncias.map((denuncia) => (
-              <DenunciaCard key={denuncia.id} denuncia={denuncia} />
+            <Text style={styles.smallTitle}>Suas denúncias</Text>
+            <TouchableOpacity style={styles.button} onPress={() => buscarDenuncias()}>
+              <Text style={styles.buttonText}>Atualizar</Text>
+            </TouchableOpacity>
+            {denunciasRealizadas.map((denuncias) => (
+              <DenunciaCard key={denuncias.id} denuncia={denuncias} />
             ))}
           </View>
         </View>

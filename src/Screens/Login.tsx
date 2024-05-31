@@ -5,9 +5,11 @@ import { StyleSheet, Text, View, ScrollView, SafeAreaView, Platform, Image, Touc
 import { Link, useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { logar } from '../services/requisicoesFirebase';
+import { auth, db } from "../config/firebase";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 export default function Login() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<PerfilScreenNavigationProp>();
 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -25,7 +27,38 @@ export default function Login() {
         Alert.alert("Nao foi efetuado login", resultado)
       }
     }
+  }
 
+  function deslogar(){
+    auth.signOut();
+    Alert.alert('Logoff', 'Deslogado com sucesso!')
+  }
+
+  function handleForgotPassword() {
+    if (email == '') {
+      Alert.alert(
+        'Campo vazio',
+        'Por favor, preencha o campo de e-mail para enviarmos o reset de senha.'
+      )
+    } else {
+      Alert.alert(
+        'Confirmar reset de senha?',
+        'Clique em Confirmar para enviarmos um e-mail para você!',
+        [
+          {
+            text: 'Cancelar',
+            style: 'cancel',
+          },
+          {
+            text: 'Confirmar',
+            onPress: () => {
+              sendPasswordResetEmail(auth, email)
+                .catch(error => console.log(error))
+            },
+          },
+        ]
+      );
+    }
   }
 
   return (
@@ -51,7 +84,7 @@ export default function Login() {
           <Text style={styles.text}>
             Esqueceu a senha?
             <TouchableOpacity
-            // onPress={() => navigation.navigate('Cadastro')}
+             onPress={() => handleForgotPassword()}
             >
               <Text style={styles.link}>Clique aqui!</Text>
             </TouchableOpacity>
@@ -65,10 +98,14 @@ export default function Login() {
 
           <Text style={styles.text}>
             Não possui cadastro?
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
               <Text style={styles.link}>Cadastre-se!</Text>
             </TouchableOpacity>
           </Text>
+
+          <TouchableOpacity style={styles.button} onPress={deslogar}>
+            <Text style={styles.buttonText}>Deslogar</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

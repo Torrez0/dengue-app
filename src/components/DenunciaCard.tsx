@@ -39,7 +39,7 @@ const DenunciaCard: React.FC<DenunciaCardProps> = ({ denuncia }) => {
   return (
     <View style={styles.denunciasCard}>
       <View style={{ maxWidth: 150, rowGap: 5 }}>
-        <Text style={{ fontSize: 14, fontWeight: "700" }}>{denuncia.rua}</Text>
+        <Text style={{ fontSize: 14, fontWeight: "700" }}>{denuncia.endereco}</Text>
         <Text style={{ color: "#959595", fontSize: 12 }}>
           {"Data: " + denuncia.data}
         </Text>

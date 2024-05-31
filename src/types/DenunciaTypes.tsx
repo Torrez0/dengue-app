@@ -1,8 +1,6 @@
 export type Denuncia = {
   id: string;
-  rua: string;
-  numero: string;
-  bairro: string;
+  endereco: string;
   cidade: string;
   estado: string;
   data: string;

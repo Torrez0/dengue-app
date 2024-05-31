@@ -3,7 +3,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword
 } from "firebase/auth";
-import { deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 
 export async function cadastrarUsuario(nomeCompleto, dataNascimento, email, senha){
@@ -51,5 +51,41 @@ export async function logar(email, senha){
             return "Email e senha nao conferem."
         });
         return resultado
-
 }
+
+export async function criarDenuncia(idUsuario, estado, cidade, endereco, descricao, data){
+    try{
+
+        const denunciaInfo = {
+            usuario: idUsuario,
+            estado: estado,
+            cidade: cidade,
+            endereco: endereco,
+            descricao: descricao,
+            status: 'em análise',
+            data: data
+        };
+
+        addDoc(collection(db,'denuncias'), denunciaInfo);
+
+        console.log('Denuncia criada');
+
+        return 'Sucesso!'
+
+    } catch(error) {
+        console.error('Erro: ', error)
+        return 'Erro ao criar denuncia'
+    }
+}
+
+export async function obterIdUsuarioLogado() {
+    const usuarioAtual = auth.currentUser;
+    if (usuarioAtual) {
+        const idUsuario = usuarioAtual.uid;
+        console.log('ID do usuário logado:', idUsuario);
+        return idUsuario;
+    } else {
+        console.log('Nenhum usuário logado.');
+        return 'Nenhum usuário logado.';
+    }
+};
