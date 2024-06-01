@@ -11,10 +11,32 @@ import {
   Alert,
 } from "react-native";
 import { PerfilScreenNavigationProp } from "../types/NavigationTypes";
-import { auth } from "../config/firebase";
+import { auth, db } from "../config/firebase";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { buscarInformacoesUsuario } from "../services/requisicoesFirebase";
 
 export default function Perfil() {
+  const [nomeUsuario, setNomeUsuario] = useState("");
+  const [emailUsuario, setEmailUsuario] = useState("");
+  const [dataNascimentoUsuario, setDataNascimentoUsuario] = useState("");
   const navigation = useNavigation<PerfilScreenNavigationProp>();
+
+  useEffect(() => {
+    async function obterInformacoesUsuario() {
+      const informacoesUsuario = await buscarInformacoesUsuario();
+      if (informacoesUsuario) {
+        const nomeCompleto = informacoesUsuario.nomeCompleto;
+        const primeiroNome = nomeCompleto.split(" ")[0]; // Pegando o primeiro nome
+        setNomeUsuario(primeiroNome);
+        setEmailUsuario(informacoesUsuario.email);
+        setDataNascimentoUsuario(informacoesUsuario.dataNascimento);
+      }
+    }
+
+    obterInformacoesUsuario();
+  }, []);
+
 
   function deslogar() {
     auth.signOut();
@@ -29,7 +51,7 @@ export default function Perfil() {
           source={require("../../assets/dengue-logo.png")}
           style={styles.logo}
         />
-        <Text style={styles.welcomeText}>Olá, Bruna!</Text>
+        <Text style={styles.welcomeText}>Olá, {nomeUsuario}! </Text>
       </View>
       <ScrollView>
         <View style={styles.content}>
@@ -39,17 +61,19 @@ export default function Perfil() {
             placeholder="Nome do usuário"
           ></TextInput>
           <TextInput
-            style={styles.input}
+            style={[styles.input, styles.disabledInput]}
             placeholder="E-mail cadastrado"
+            value={emailUsuario}
             editable={false}
             selectTextOnFocus={false}
-          ></TextInput>
+          />
           <TextInput
-            style={styles.input}
+            style={[styles.input, styles.disabledInput]}
             placeholder="Data de nascimento"
+            value={dataNascimentoUsuario}
             editable={false}
             selectTextOnFocus={false}
-          ></TextInput>
+          />
           <TextInput
             style={styles.input}
             placeholder="Número de telefone cadastrado"
@@ -134,6 +158,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     paddingHorizontal: 10,
+  },
+  disabledInput: {
+    backgroundColor: "#E0E0E0",
   },
   text: {
     fontSize: 14,
