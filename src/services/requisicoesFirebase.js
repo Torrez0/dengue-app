@@ -117,3 +117,19 @@ export async function obterIdUsuarioLogado() {
     return "Nenhum usuário logado.";
   }
 }
+
+export async function buscarInformacoesUsuario() {
+  const usuarioAtual = auth.currentUser;
+  if (usuarioAtual) {
+    const userDoc = await getDoc(doc(db, "usuarios", usuarioAtual.uid));
+    if (userDoc.exists()) {
+      return userDoc.data();
+    } else {
+      console.log("Nenhum documento encontrado!");
+      return null;
+    }
+  } else {
+    console.log("Nenhum usuário logado.");
+    return null;
+  }
+}
