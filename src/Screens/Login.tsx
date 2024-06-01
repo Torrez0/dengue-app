@@ -12,16 +12,18 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import React, { useState } from "react";
 import { logar } from "../services/requisicoesFirebase";
 import { auth } from "../config/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Login() {
   const navigation = useNavigation<PerfilScreenNavigationProp>();
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [senhaVisivel, setSenhaVisivel] = useState(false);
 
   async function realizarLogin() {
     if (email === "" || senha === "") {
@@ -90,6 +92,7 @@ export default function Login() {
             placeholder="Digite a sua senha"
             style={styles.input}
             value={senha}
+            secureTextEntry={true}
             onChangeText={(senha) => setSenha(senha)}
           ></TextInput>
           <Text style={styles.text}>
@@ -98,14 +101,12 @@ export default function Login() {
               <Text style={styles.link}>Clique aqui!</Text>
             </TouchableOpacity>
           </Text>
-
           <TouchableOpacity
             style={styles.button}
             onPress={() => realizarLogin()}
           >
             <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
-
           <Text style={styles.text}>
             Não possui cadastro?
             <TouchableOpacity onPress={() => navigation.navigate("Cadastro")}>
@@ -143,16 +144,32 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 5,
     width: "100%",
-    height: 50,
+    height: 40,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
     marginBottom: 10,
     paddingHorizontal: 10,
   },
+  inputSenha: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    width: "100%",
+    height: 60,
+    marginTop: 20,
+    marginBottom: 10,
+    padding: 5,
+  },
+  eyeIcon: {
+    padding: 5,
+    width: 10,
+  },
   text: {
     fontSize: 14,
     fontWeight: "500",
+    lineHeight: 20,
   },
   link: {
     color: "#0000EE",

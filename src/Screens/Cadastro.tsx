@@ -14,6 +14,7 @@ import { RootTabNavigationProp } from "../types/NavigationTypes";
 import { useState } from "react";
 import { cadastrarUsuario } from "../services/requisicoesFirebase";
 import Denuncias from "./Denuncias";
+import MaskInput, { Masks, useMaskedInputProps } from "react-native-mask-input";
 
 export default function Cadastro() {
   const navigation = useNavigation<RootTabNavigationProp>();
@@ -75,12 +76,13 @@ export default function Cadastro() {
             value={nomeCompleto}
             onChangeText={(nomeCompleto) => setNomeCompleto(nomeCompleto)}
           ></TextInput>
-          <TextInput
+          <MaskInput
             placeholder="Digite a sua data de nascimento"
             style={styles.input}
             value={dataNascimento}
             onChangeText={(dataNascimento) => setDataNascimento(dataNascimento)}
-          ></TextInput>
+            mask={Masks.DATE_DDMMYYYY}
+          ></MaskInput>
           <TextInput
             placeholder="Digite o seu e-mail"
             style={styles.input}
@@ -91,12 +93,14 @@ export default function Cadastro() {
             placeholder="Digite a sua senha"
             style={styles.input}
             value={senha}
+            secureTextEntry={true}
             onChangeText={(senha) => setSenha(senha)}
           ></TextInput>
           <TextInput
             placeholder="Confirme a sua senha"
             style={styles.input}
             value={confirmaSenha}
+            secureTextEntry={true}
             onChangeText={(confirmaSenha) => setConfirmaSenha(confirmaSenha)}
           ></TextInput>
           <TouchableOpacity
