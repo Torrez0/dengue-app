@@ -15,6 +15,7 @@ import { auth, db } from "../config/firebase";
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { buscarInformacoesUsuario } from "../services/requisicoesFirebase";
+import MaskInput, { Masks } from "react-native-mask-input";
 
 export default function Perfil() {
   const [nomeUsuario, setNomeUsuario] = useState("");
@@ -36,7 +37,6 @@ export default function Perfil() {
 
     obterInformacoesUsuario();
   }, []);
-
 
   function deslogar() {
     auth.signOut();
@@ -78,6 +78,11 @@ export default function Perfil() {
             style={styles.input}
             placeholder="Número de telefone cadastrado"
           ></TextInput>
+          <MaskInput
+            style={styles.input}
+            placeholder="Número de telefone cadastrado"
+            mask={Masks.BRL_PHONE}
+          ></MaskInput>
           <TextInput
             style={styles.input}
             placeholder="Selecione o seu Estado"
