@@ -1,14 +1,16 @@
+import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from './Screens/Home';
-import Denuncias from "./Screens/Denuncias";
-import Perfil from "./Screens/Perfil";
-import Cuidados from "./Screens/Cuidados";
-import Cadastro from "./Screens/Cadastro";
-import Login from "./Screens/Login";
-import TEMAS from "./estilos/temas";
+import Home from "./screens/Home";
+import Denuncias from "./screens/Denuncias";
+import Perfil from "./screens/Perfil";
+import Cuidados from "./screens/Cuidados";
+import Cadastro from "./screens/Cadastro";
+import Login from "./screens/Login";
 import { Ionicons } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { Text, View, TouchableOpacity, Alert } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
+import AuthContext from "./context/AuthContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -24,6 +26,23 @@ function PerfilRoutes() {
 }
 
 function Routes() {
+  const { isLoggedIn } = useContext(AuthContext);
+  // const navigation = useNavigation();
+
+  const tratarBotaoDenuncias = (navigation) => {
+    if (!isLoggedIn) {
+      Alert.alert(
+        "Faça login",
+        "Você precisa fazer login para acessar as denúncias.",
+        [
+          { text: "Cancelar", onPress: () => navigation.navigate("Home") },
+          { text: "OK", onPress: () => navigation.navigate("Perfil") },
+        ],
+        { cancelable: false }
+      );
+    }
+  };
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -108,8 +127,17 @@ function Routes() {
       <Tab.Screen
         name="Denuncias"
         component={Denuncias}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            if (!isLoggedIn) {
+              e.preventDefault();
+              tratarBotaoDenuncias(navigation);
+            }
+          },
+        })}
         options={{ headerShown: false }}
       />
+
       <Tab.Screen
         name="Perfil"
         component={PerfilRoutes}

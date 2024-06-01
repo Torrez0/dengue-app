@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { DenunciaCardProps } from "../types/DenunciaTypes";
+import { excluirDenuncia } from "../services/requisicoesFirebase";
 
 const getStatusStyle = (status: string) => {
   switch (status) {
@@ -36,10 +37,25 @@ const getStatusStyle = (status: string) => {
 const DenunciaCard: React.FC<DenunciaCardProps> = ({ denuncia }) => {
   const statusStyle = getStatusStyle(denuncia.status);
 
+  // TODO: ABRIR MODAL PARA O USUARIO CONFIRMAR EXCLUSAO DA DENUNCIA E DAR RELOAD NA PAGINA 
+  const tratarExcluirDenuncia = () => {
+    Alert.alert(
+      "Confirmar Exclusão",
+      "Tem certeza de que deseja excluir esta denúncia?",
+      [
+        { text: "Cancelar" },
+        { text: "Confirmar", onPress: () => excluirDenuncia(denuncia.id) },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <View style={styles.denunciasCard}>
       <View style={{ maxWidth: 150, rowGap: 5 }}>
-        <Text style={{ fontSize: 14, fontWeight: "700" }}>{denuncia.endereco}</Text>
+        <Text style={{ fontSize: 14, fontWeight: "700" }}>
+          {denuncia.endereco}
+        </Text>
         <Text style={{ color: "#959595", fontSize: 12 }}>
           {"Data: " + denuncia.data}
         </Text>
@@ -55,9 +71,9 @@ const DenunciaCard: React.FC<DenunciaCardProps> = ({ denuncia }) => {
           {"Denúncia " + denuncia.status}
         </Text>
       </View>
-      <TouchableOpacity
-      // onPress={() => navigation.navigate('LINK')}
-      >
+      
+      {/* TODO: CONSEGUIR APAGAR DENUNCIA  */}
+      <TouchableOpacity onPress={tratarExcluirDenuncia}>
         <View style={{ paddingRight: 10 }}>
           <Ionicons name={"trash-outline"} size={25} />
         </View>

@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import {
-  Alert, StyleSheet,
+  Alert,
+  StyleSheet,
   Text,
   View,
   ScrollView,
@@ -9,38 +10,56 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { PerfilScreenNavigationProp } from "../types/PerfilNavigationTypes"; import { useState } from 'react';
-import { cadastrarUsuario } from '../services/requisicoesFirebase';
-
+import { RootTabNavigationProp } from "../types/NavigationTypes";
+import { useState } from "react";
+import { cadastrarUsuario } from "../services/requisicoesFirebase";
+import Denuncias from "./Denuncias";
 
 export default function Cadastro() {
-  const navigation = useNavigation<PerfilScreenNavigationProp>();
+  const navigation = useNavigation<RootTabNavigationProp>();
 
-
-
-  const [nomeCompleto, setNomeCompleto] = useState('');
-  const [dataNascimento, setDataNascimento] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [confirmaSenha, setConfirmaSenha] = useState('');
+  const [nomeCompleto, setNomeCompleto] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [confirmaSenha, setConfirmaSenha] = useState("");
 
   async function realizarCadastro() {
-    if (nomeCompleto === '' || dataNascimento === '' || email === '' || senha === '') {
-      Alert.alert('Campos vazios', 'Verifique os campos', [{ text: 'OK', style: 'cancel' }], { cancelable: true });
+    if (
+      nomeCompleto === "" ||
+      dataNascimento === "" ||
+      email === "" ||
+      senha === ""
+    ) {
+      Alert.alert(
+        "Campos vazios",
+        "Verifique os campos",
+        [{ text: "OK", style: "cancel" }],
+        { cancelable: true }
+      );
     } else if (senha !== confirmaSenha) {
-      Alert.alert('Senha nao coincide', 'Verifique a senha', [{ text: 'OK', style: 'cancel' }], { cancelable: true });
-    }
-    else {
-      const resultado = await cadastrarUsuario(nomeCompleto, dataNascimento, email, senha);
-      if (resultado === 'Sucesso!') {
-        Alert.alert(resultado, 'Usuario cadastrado!')
-        setNomeCompleto('');
-        setDataNascimento('');
-        setEmail('');
-        setSenha('');
-        setConfirmaSenha('');
+      Alert.alert(
+        "Senha nao coincide",
+        "Verifique a senha",
+        [{ text: "OK", style: "cancel" }],
+        { cancelable: true }
+      );
+    } else {
+      const resultado = await cadastrarUsuario(
+        nomeCompleto,
+        dataNascimento,
+        email,
+        senha
+      );
+      if (resultado === "Sucesso!") {
+        Alert.alert(resultado, "Usuario cadastrado!");
+        setNomeCompleto("");
+        setDataNascimento("");
+        setEmail("");
+        setSenha("");
+        setConfirmaSenha("");
       } else {
-        Alert.alert(resultado, "Erro ao cadastrar.")
+        Alert.alert(resultado, "Erro ao cadastrar.");
       }
     }
   }
@@ -54,33 +73,36 @@ export default function Cadastro() {
             placeholder="Digite o seu nome completo"
             style={styles.input}
             value={nomeCompleto}
-            onChangeText={nomeCompleto => setNomeCompleto(nomeCompleto)}
+            onChangeText={(nomeCompleto) => setNomeCompleto(nomeCompleto)}
           ></TextInput>
           <TextInput
             placeholder="Digite a sua data de nascimento"
             style={styles.input}
             value={dataNascimento}
-            onChangeText={dataNascimento => setDataNascimento(dataNascimento)}
+            onChangeText={(dataNascimento) => setDataNascimento(dataNascimento)}
           ></TextInput>
           <TextInput
             placeholder="Digite o seu e-mail"
             style={styles.input}
             value={email}
-            onChangeText={email => setEmail(email)}
+            onChangeText={(email) => setEmail(email)}
           ></TextInput>
           <TextInput
             placeholder="Digite a sua senha"
             style={styles.input}
             value={senha}
-            onChangeText={senha => setSenha(senha)}
+            onChangeText={(senha) => setSenha(senha)}
           ></TextInput>
           <TextInput
             placeholder="Confirme a sua senha"
             style={styles.input}
             value={confirmaSenha}
-            onChangeText={confirmaSenha => setConfirmaSenha(confirmaSenha)}
+            onChangeText={(confirmaSenha) => setConfirmaSenha(confirmaSenha)}
           ></TextInput>
-          <TouchableOpacity style={styles.button} onPress={() => realizarCadastro()}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => realizarCadastro()}
+          >
             <Text style={styles.buttonText}>Confirmar</Text>
           </TouchableOpacity>
 
@@ -100,7 +122,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingTop: 100,
-    //   width: '100%',
   },
   content: {
     alignSelf: "center",

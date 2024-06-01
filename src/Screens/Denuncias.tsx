@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import {
   StyleSheet,
@@ -10,28 +10,65 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { Denuncia } from "../types/DenunciaTypes";
-import DenunciaCard from "../components/DenunciaCard";
-import { useNavigation } from '@react-navigation/native';
-import { PerfilScreenNavigationProp } from "../types/PerfilNavigationTypes";
-import { auth, db } from "../config/firebase";
-import { criarDenuncia, obterIdUsuarioLogado } from "../services/requisicoesFirebase";
+import { useNavigation } from "@react-navigation/native";
+import {
+  criarDenuncia,
+  obterIdUsuarioLogado,
+} from "../services/requisicoesFirebase";
+import AuthContext from "../context/AuthContext";
+import { RootTabNavigationProp } from "../types/NavigationTypes";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../config/firebase";
+import DenunciaCard from "../components/DenunciaCard";
 
 export default function Denuncias() {
-
-  const [estado, setEstado] = useState('');
-  const [cidade, setCidade] = useState('');
-  const [endereco, setEndereco] = useState('');
-  const [descricao, setDescricao] = useState('');
+  const { isLoggedIn } = useContext(AuthContext); // Acesse o estado de login do contexto
+  const [estado, setEstado] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [endereco, setEndereco] = useState("");
+  const [descricao, setDescricao] = useState("");
   const [denunciasRealizadas, setDenunciasRealizadas] = useState([]);
 
-  const navigation = useNavigation<PerfilScreenNavigationProp>();
+  const navigation = useNavigation<RootTabNavigationProp>();
+
+  async function realizarDenuncia() {
+    if (estado === "" || cidade === "" || endereco === "" || descricao === "") {
+      Alert.alert("Campos vazios", "Verifique se os campos estão preenchidos");
+    } else if (!isLoggedIn) {
+      // Verifica se o usuário não está logado
+      Alert.alert("Ops!", "É preciso estar logado para fazer uma denúncia!");
+    } else {
+      const idUsuario = await obterIdUsuarioLogado();
+      const data = "31/05/2024";
+      const resultado = await criarDenuncia(
+        idUsuario,
+        estado,
+        cidade,
+        endereco,
+        descricao,
+        data
+      );
+
+      if (resultado === "Sucesso!") {
+        setEstado("");
+        setCidade("");
+        setEndereco("");
+        setDescricao("");
+
+        Alert.alert("Sucesso!", "Denúncia criada!");
+      } else {
+        Alert.alert(resultado);
+      }
+    }
+  }
 
   const buscarDenuncias = async () => {
     try {
-      const denunciasRef = collection(db, 'denuncias');
-      const q = query(denunciasRef, where('usuario', '==', await obterIdUsuarioLogado()));
+      const denunciasRef = collection(db, "denuncias");
+      const q = query(
+        denunciasRef,
+        where("usuario", "==", await obterIdUsuarioLogado())
+      );
       const querySnapshot = await getDocs(q);
 
       const denuncias = [];
@@ -43,79 +80,7 @@ export default function Denuncias() {
     } catch (error) {
       console.error("Erro ao buscar query: ", error);
     }
-  }
-
-  // const denuncias: Denuncia[] = [
-  //   {
-  //     id: "01",
-  //     rua: "Rua da Aurora",
-  //     numero: "123",
-  //     bairro: "Centro",
-  //     cidade: "Recife",
-  //     estado: "Pernambuco",
-  //     data: "02/02/2024",
-  //     status: "solucionada",
-  //   },
-  //   {
-  //     id: "02",
-  //     rua: "Rua Benjamin Constant",
-  //     numero: "1456",
-  //     bairro: "Torre",
-  //     cidade: "Recife",
-  //     estado: "Pernambuco",
-  //     data: "25/05/2024",
-  //     status: "em análise",
-  //   },
-  //   {
-  //     id: "03",
-  //     rua: "Rua Benjamin Constant",
-  //     numero: "1456",
-  //     bairro: "Torre",
-  //     cidade: "Recife",
-  //     estado: "Pernambuco",
-  //     data: "25/05/2024",
-  //     status: "negada",
-  //   },
-  //   {
-  //     id: "04",
-  //     rua: "Avenida Rio Branco",
-  //     numero: "1456",
-  //     bairro: "Torre",
-  //     cidade: "Recife",
-  //     estado: "Pernambuco",
-  //     data: "25/05/2024",
-  //     status: "em andamento",
-  //   },
-  // ];
-
-  async function realizarDenuncia() {
-
-    if (estado === ('') || cidade === ('') || endereco === ('') || descricao === ('')) {
-      Alert.alert("Campos vazios", "Verifique se os campos estao preenchidos")
-    } else if (await obterIdUsuarioLogado() === 'Nenhum usuário logado.') {
-      Alert.alert('Ops!', 'É preciso estar logado para fazer uma denúncia!')
-    } else {
-
-      const idUsuario = await obterIdUsuarioLogado();
-      const data = '31/05/2024';
-      const resultado = await criarDenuncia(idUsuario, estado, cidade, endereco, descricao, data);
-
-      if (resultado === 'Sucesso!') {
-        setEstado('');
-        setCidade('');
-        setEndereco('');
-        setDescricao('');
-
-        Alert.alert('Sucesso!', 'Denuncia criada!');
-      } else {
-        Alert.alert(resultado);
-      }
-
-    }
-
-  }
-
-
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -126,43 +91,49 @@ export default function Denuncias() {
             style={styles.input}
             placeholder="Selecione o Estado"
             value={estado}
-            onChangeText={estado => setEstado(estado)}
-          ></TextInput>
+            onChangeText={(estado) => setEstado(estado)}
+          />
           <TextInput
             style={styles.input}
             placeholder="Selecione a cidade"
             value={cidade}
-            onChangeText={cidade => setCidade(cidade)}
-          ></TextInput>
+            onChangeText={(cidade) => setCidade(cidade)}
+          />
           <TextInput
             style={styles.input}
             placeholder="Digite o endereço"
             value={endereco}
-            onChangeText={endereco => setEndereco(endereco)}
-          ></TextInput>
+            onChangeText={(endereco) => setEndereco(endereco)}
+          />
           <TextInput
             style={styles.input}
             placeholder="Descrição / Denúnica"
             value={descricao}
-            onChangeText={descricao => setDescricao(descricao)}
-          ></TextInput>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Cadastro')}
-          >
+            onChangeText={(descricao) => setDescricao(descricao)}
+          />
+          <TouchableOpacity onPress={() => navigation.navigate("Cadastro")}>
             <Text>
-              <Ionicons name="attach" size={18}></Ionicons>
-              Cadastre-se!
+              <Ionicons name="attach" size={18} />
+              Anexar evidências
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={() => realizarDenuncia()}>
+          <TouchableOpacity style={styles.button} onPress={realizarDenuncia}>
             <Text style={styles.buttonText}>Enviar</Text>
           </TouchableOpacity>
 
           <View style={styles.denunciasBox}>
             <Text style={styles.smallTitle}>Suas denúncias</Text>
-            <TouchableOpacity style={styles.button} onPress={() => buscarDenuncias()}>
-              <Text style={styles.buttonText}>Atualizar</Text>
+            <TouchableOpacity
+              // style={styles.button}
+              onPress={() => buscarDenuncias()}
+            >
+              <Text
+              // style={styles.buttonText}
+              >
+                <Ionicons name="reload-outline" size={18}></Ionicons>
+                Atualizar lista
+              </Text>
             </TouchableOpacity>
             {denunciasRealizadas.map((denuncias) => (
               <DenunciaCard key={denuncias.id} denuncia={denuncias} />

@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import {
   StyleSheet,
   Text,
@@ -7,9 +8,20 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
+import { PerfilScreenNavigationProp } from "../types/NavigationTypes";
+import { auth } from "../config/firebase";
 
 export default function Perfil() {
+  const navigation = useNavigation<PerfilScreenNavigationProp>();
+
+  function deslogar() {
+    auth.signOut();
+    Alert.alert("Logoff", "Deslogado com sucesso!");
+    navigation.navigate("Login");
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.welcomeBar}>
@@ -47,9 +59,14 @@ export default function Perfil() {
             placeholder="Selecione o seu Estado"
           ></TextInput>
 
-          <Text style={styles.text}>Sair</Text>
+          <Text style={styles.text} onPress={deslogar}>
+            Sair
+          </Text>
 
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("Denuncias")}
+          >
             <Text style={styles.buttonText}>Suas denúncias</Text>
           </TouchableOpacity>
 
