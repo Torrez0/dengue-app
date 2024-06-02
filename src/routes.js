@@ -27,7 +27,6 @@ function PerfilRoutes() {
 
 function Routes() {
   const { isLoggedIn } = useContext(AuthContext);
-  // const navigation = useNavigation();
 
   const tratarBotaoDenuncias = (navigation) => {
     if (!isLoggedIn) {

@@ -74,10 +74,6 @@ export default function Perfil() {
             editable={false}
             selectTextOnFocus={false}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Número de telefone cadastrado"
-          ></TextInput>
           <MaskInput
             style={styles.input}
             placeholder="Número de telefone cadastrado"

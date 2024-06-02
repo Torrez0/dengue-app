@@ -96,14 +96,14 @@ export async function criarDenuncia(
 
 // TODO: APAGAR DENUNCIA DO FIREBASE
 export async function excluirDenuncia(idDenuncia) {
-  // try {
-  //   await deleteDoc(doc(db, "denuncias", idDenuncia));
-  //   console.log("Denúncia excluída com sucesso!");
-  //   return "Sucesso!";
-  // } catch (error) {
-  //   console.error("Erro ao excluir denúncia:", error);
-  //   return "Erro ao excluir denúncia";
-  // }
+  try {
+    await deleteDoc(doc(db, "denuncias", idDenuncia));
+    console.log("Denúncia excluída com sucesso!");
+    return "Sucesso!";
+  } catch (error) {
+    console.error("Erro ao excluir denúncia:", error);
+    return "Erro ao excluir denúncia";
+  }
 }
 
 export async function obterIdUsuarioLogado() {

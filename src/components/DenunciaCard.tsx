@@ -34,17 +34,25 @@ const getStatusStyle = (status: string) => {
   }
 };
 
-const DenunciaCard: React.FC<DenunciaCardProps> = ({ denuncia }) => {
+const DenunciaCard: React.FC<DenunciaCardProps> = ({ denuncia, onDelete }) => {
   const statusStyle = getStatusStyle(denuncia.status);
 
-  // TODO: ABRIR MODAL PARA O USUARIO CONFIRMAR EXCLUSAO DA DENUNCIA E DAR RELOAD NA PAGINA 
   const tratarExcluirDenuncia = () => {
     Alert.alert(
       "Confirmar Exclusão",
       "Tem certeza de que deseja excluir esta denúncia?",
       [
         { text: "Cancelar" },
-        { text: "Confirmar", onPress: () => excluirDenuncia(denuncia.id) },
+        { text: "Confirmar", onPress: async () => {
+          const result = await excluirDenuncia(denuncia.id);
+          if (result === "Sucesso!") {
+            if (onDelete) {
+              onDelete(denuncia.id);
+            }
+          } else {
+            Alert.alert("Erro", "Não foi possível excluir a denúncia.");
+          }
+        }},
       ],
       { cancelable: false }
     );
@@ -71,8 +79,6 @@ const DenunciaCard: React.FC<DenunciaCardProps> = ({ denuncia }) => {
           {"Denúncia " + denuncia.status}
         </Text>
       </View>
-      
-      {/* TODO: CONSEGUIR APAGAR DENUNCIA  */}
       <TouchableOpacity onPress={tratarExcluirDenuncia}>
         <View style={{ paddingRight: 10 }}>
           <Ionicons name={"trash-outline"} size={25} />
