@@ -9,4 +9,5 @@ export type Denuncia = {
 
 export type DenunciaCardProps = {
   denuncia: Denuncia;
+  onDelete: (id: string) => void; 
 };

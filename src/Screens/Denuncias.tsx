@@ -82,6 +82,10 @@ export default function Denuncias() {
     }
   };
 
+  const handleDelete = (id) => {
+    setDenunciasRealizadas(denunciasRealizadas.filter((denuncia) => denuncia.id !== id));
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -136,7 +140,7 @@ export default function Denuncias() {
               </Text>
             </TouchableOpacity>
             {denunciasRealizadas.map((denuncias) => (
-              <DenunciaCard key={denuncias.id} denuncia={denuncias} />
+              <DenunciaCard key={denuncias.id} denuncia={denuncias} onDelete={handleDelete} />
             ))}
           </View>
         </View>
