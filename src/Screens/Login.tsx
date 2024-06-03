@@ -16,14 +16,13 @@ import React, { useState } from "react";
 import { logar } from "../services/requisicoesFirebase";
 import { auth } from "../config/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { Ionicons } from "@expo/vector-icons";
 
 export default function Login() {
   const navigation = useNavigation<PerfilScreenNavigationProp>();
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [senhaVisivel, setSenhaVisivel] = useState(false);
+  // const [senhaVisivel, setSenhaVisivel] = useState(false);
 
   async function realizarLogin() {
     if (email === "" || senha === "") {
@@ -98,11 +97,9 @@ export default function Login() {
               </Text>
             </TouchableOpacity>
           </Text>
-
           <TouchableOpacity
             style={styles.button}
-            onPress={() => realizarLogin()}
-          >
+            onPress={() => realizarLogin()}>
             <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
           <Text style={styles.text}>

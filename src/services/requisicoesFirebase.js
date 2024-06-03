@@ -120,34 +120,3 @@ export async function buscarInformacoesUsuario() {
     return null;
   }
 }
-
-// export async function excluirContaUsuario() {
-//   try {
-//     const usuarioAtual = auth.currentUser;
-//     if (!usuarioAtual) {
-//       return "Nenhum usuário logado.";
-//     }
-
-//     // Deletar documentos relacionados ao usuário no Firestore
-//     const denunciasRef = collection(db, "denuncias");
-//     const q = query(denunciasRef, where("usuario", "==", usuarioAtual.uid));
-//     const querySnapshot = await getDocs(q);
-
-//     const batch = db.batch();
-//     querySnapshot.forEach((doc) => {
-//       batch.delete(doc.ref);
-//     });
-
-//     await batch.commit();
-
-//     // Deletar o documento do usuário no Firestore
-//     await deleteDoc(doc(db, "usuarios", usuarioAtual.uid));
-
-//     // Deletar a conta de autenticação do usuário
-//     await deleteUser(usuarioAtual);
-
-//     return "Sucesso!";
-//   } catch (error) {
-//     return "Erro ao excluir a conta";
-//   }
-//}

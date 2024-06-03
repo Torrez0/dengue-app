@@ -10,10 +10,8 @@ export type RootStackParamList = {
   Cadastro: undefined;
 };
 
-// Tipo para navegação das rotas principais (abas)
 export type RootTabNavigationProp = BottomTabNavigationProp<RootStackParamList>;
 
-// Tipo para navegação das rotas do stack de perfil
 export type PerfilScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   "Perfil"

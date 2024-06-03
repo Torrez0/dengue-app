@@ -18,7 +18,7 @@ function PerfilRoutes() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="PerfilDetalhes" component={Perfil} />
+      <Stack.Screen name="Perfil" component={Perfil} />
       <Stack.Screen name="Cadastro" component={Cadastro} />
     </Stack.Navigator>
   );
@@ -34,7 +34,7 @@ function Routes() {
         "Você precisa fazer login para acessar as denúncias.",
         [
           { text: "Cancelar", onPress: () => navigation.navigate("Home") },
-          { text: "OK", onPress: () => navigation.navigate("Perfil") },
+          { text: "OK", onPress: () => navigation.navigate("Login") },
         ],
         { cancelable: false }
       );
@@ -67,7 +67,7 @@ function Routes() {
               iconName = focused ? "megaphone" : "megaphone-outline";
               label = "Denúncias";
               break;
-            case "Perfil":
+            case "PerfilRoutes":
               iconName = focused ? "person" : "person-outline";
               label = "Perfil";
               break;
@@ -137,7 +137,7 @@ function Routes() {
       />
 
       <Tab.Screen
-        name="Perfil"
+        name="PerfilRoutes"
         component={PerfilRoutes}
         options={{ headerShown: false }}
       />

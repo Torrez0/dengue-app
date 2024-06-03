@@ -35,7 +35,6 @@ export default function Denuncias() {
     if (estado === "" || cidade === "" || endereco === "" || descricao === "") {
       Alert.alert("Campos vazios", "Verifique se os campos estão preenchidos");
     } else if (!isLoggedIn) {
-      // Verifica se o usuário não está logado
       Alert.alert("Ops!", "É preciso estar logado para fazer uma denúncia!");
     } else {
       const idUsuario = await obterIdUsuarioLogado();

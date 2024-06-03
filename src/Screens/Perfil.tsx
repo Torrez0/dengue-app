@@ -13,9 +13,7 @@ import {
 import { PerfilScreenNavigationProp } from "../types/NavigationTypes";
 import { auth } from "../config/firebase";
 import { useEffect, useState } from "react";
-import {
-  buscarInformacoesUsuario
-} from "../services/requisicoesFirebase";
+import { buscarInformacoesUsuario } from "../services/requisicoesFirebase";
 
 export default function Perfil() {
   const [nomeUsuario, setNomeUsuario] = useState("");
@@ -27,8 +25,6 @@ export default function Perfil() {
     async function obterInformacoesUsuario() {
       const informacoesUsuario = await buscarInformacoesUsuario();
       if (informacoesUsuario) {
-        const nomeCompleto = informacoesUsuario.nomeCompleto;
-        const primeiroNome = nomeCompleto.split(" ")[0];
         setNomeUsuario(informacoesUsuario.nomeCompleto);
         setEmailUsuario(informacoesUsuario.email);
         setDataNascimentoUsuario(informacoesUsuario.dataNascimento);
@@ -43,29 +39,6 @@ export default function Perfil() {
     Alert.alert("Logoff", "Deslogado com sucesso!");
     navigation.navigate("Login");
   }
-
-  // async function handleExcluirConta() {
-  //   Alert.alert(
-  //     "Confirmar Exclusão",
-  //     "Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.",
-  //     [
-  //       { text: "Cancelar" },
-  //       {
-  //         text: "Confirmar",
-  //         onPress: async () => {
-  //           const result = await excluirContaUsuario();
-  //           if (result === "Sucesso!") {
-  //             Alert.alert("Sucesso", "Conta excluída com sucesso!");
-  //             deslogar();
-  //           } else {
-  //             Alert.alert("Erro", "Não foi possível excluir a conta.");
-  //           }
-  //         },
-  //       },
-  //     ],
-  //     { cancelable: false }
-  //   );
-  // }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -111,10 +84,6 @@ export default function Perfil() {
             onPress={() => navigation.navigate("Denuncias")}
           >
             <Text style={styles.buttonText}>Suas denúncias</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity>
-            <Text style={styles.text}>Excluir conta</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
