@@ -5,17 +5,15 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-import { auth } from "../config/firebase"; // Importe seu módulo de configuração do Firebase
-import { onAuthStateChanged, User } from "firebase/auth";
+import { auth } from "../config/firebase"; 
+import { onAuthStateChanged } from "firebase/auth";
 
-// Definindo um tipo para os dados do usuário
+
 interface UserData {
   uid: string;
   email: string;
-  // Adicione outras propriedades do usuário conforme necessário
 }
 
-// Definindo um tipo para o contexto de autenticação
 interface AuthContextProps {
   user: UserData | null;
   loading: boolean;
@@ -27,12 +25,11 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-// Criando o contexto de autenticação
 const AuthContext = createContext<AuthContextProps>({
     user: null,
     loading: true,
     error: null,
-    isLoggedIn: false, // Adicionando a propriedade 'isLoggedIn' com valor padrão 'false'
+    isLoggedIn: false,
   });
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
@@ -61,7 +58,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return () => unsubscribe();
     }, []);
   
-    // Derivar 'isLoggedIn' de 'user'
     const isLoggedIn = !!user;
   
     return (

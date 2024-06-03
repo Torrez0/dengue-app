@@ -6,7 +6,6 @@ import {
   View,
   ScrollView,
   SafeAreaView,
-  Platform,
   TextInput,
   TouchableOpacity,
 } from "react-native";
@@ -14,7 +13,7 @@ import { RootTabNavigationProp } from "../types/NavigationTypes";
 import { useState } from "react";
 import { cadastrarUsuario } from "../services/requisicoesFirebase";
 import Denuncias from "./Denuncias";
-import MaskInput, { Masks, useMaskedInputProps } from "react-native-mask-input";
+import MaskInput, { Masks } from "react-native-mask-input";
 
 export default function Cadastro() {
   const navigation = useNavigation<RootTabNavigationProp>();
