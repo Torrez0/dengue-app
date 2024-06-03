@@ -22,7 +22,7 @@ import { db } from "../config/firebase";
 import DenunciaCard from "../components/DenunciaCard";
 
 export default function Denuncias() {
-  const { isLoggedIn } = useContext(AuthContext); // Acesse o estado de login do contexto
+  const { isLoggedIn } = useContext(AuthContext);
   const [estado, setEstado] = useState("");
   const [cidade, setCidade] = useState("");
   const [endereco, setEndereco] = useState("");
@@ -39,14 +39,12 @@ export default function Denuncias() {
       Alert.alert("Ops!", "É preciso estar logado para fazer uma denúncia!");
     } else {
       const idUsuario = await obterIdUsuarioLogado();
-      const data = "31/05/2024";
       const resultado = await criarDenuncia(
         idUsuario,
         estado,
         cidade,
         endereco,
         descricao,
-        data
       );
 
       if (resultado === "Sucesso!") {
@@ -93,13 +91,13 @@ export default function Denuncias() {
           <Text style={styles.title}>Denuncie aqui</Text>
           <TextInput
             style={styles.input}
-            placeholder="Selecione o Estado"
+            placeholder="Digite o Estado"
             value={estado}
             onChangeText={(estado) => setEstado(estado)}
           />
           <TextInput
             style={styles.input}
-            placeholder="Selecione a cidade"
+            placeholder="Digite a cidade"
             value={cidade}
             onChangeText={(cidade) => setCidade(cidade)}
           />
@@ -115,13 +113,6 @@ export default function Denuncias() {
             value={descricao}
             onChangeText={(descricao) => setDescricao(descricao)}
           />
-          <TouchableOpacity onPress={() => navigation.navigate("Cadastro")}>
-            <Text>
-              <Ionicons name="attach" size={18} />
-              Anexar evidências
-            </Text>
-          </TouchableOpacity>
-
           <TouchableOpacity style={styles.button} onPress={realizarDenuncia}>
             <Text style={styles.buttonText}>Enviar</Text>
           </TouchableOpacity>
@@ -129,13 +120,10 @@ export default function Denuncias() {
           <View style={styles.denunciasBox}>
             <Text style={styles.smallTitle}>Suas denúncias</Text>
             <TouchableOpacity
-              // style={styles.button}
               onPress={() => buscarDenuncias()}
             >
-              <Text
-              // style={styles.buttonText}
-              >
-                <Ionicons name="reload-outline" size={18}></Ionicons>
+              <Text style={{alignSelf: "center", paddingTop: 15}}>
+                <Ionicons name="reload-outline" size={15}></Ionicons>
                 Atualizar lista
               </Text>
             </TouchableOpacity>
@@ -245,18 +233,6 @@ const styles = StyleSheet.create({
   denunciasBox: {
     paddingBottom: 40,
     alignSelf: "center",
-  },
-  denunciasCard: {
-    backgroundColor: "#fff",
-    width: 300,
-    minHeight: 80,
-    borderRadius: 10,
-    borderBlockColor: "#0F5398",
-    borderWidth: 1,
-    padding: 10,
-    marginTop: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: "center"
   },
 });

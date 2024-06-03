@@ -34,6 +34,14 @@ const getStatusStyle = (status: string) => {
   }
 };
 
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 const DenunciaCard: React.FC<DenunciaCardProps> = ({ denuncia, onDelete }) => {
   const statusStyle = getStatusStyle(denuncia.status);
 
@@ -65,7 +73,7 @@ const DenunciaCard: React.FC<DenunciaCardProps> = ({ denuncia, onDelete }) => {
           {denuncia.endereco}
         </Text>
         <Text style={{ color: "#959595", fontSize: 12 }}>
-          {"Data: " + denuncia.data}
+          {"Data: " + formatDate(denuncia.data)}
         </Text>
         <Text
           style={{
