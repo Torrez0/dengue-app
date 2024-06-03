@@ -7,9 +7,8 @@ import Cuidados from "./screens/Cuidados";
 import Cadastro from "./screens/Cadastro";
 import Login from "./screens/Login";
 import { Ionicons } from "@expo/vector-icons";
-import { Text, View, TouchableOpacity, Alert } from "react-native";
+import { Text, View, Alert } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/native";
 import AuthContext from "./context/AuthContext";
 
 const Tab = createBottomTabNavigator();
@@ -19,7 +18,7 @@ function PerfilRoutes() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Perfil" component={Perfil} />
+      <Stack.Screen name="PerfilDetalhes" component={Perfil} />
       <Stack.Screen name="Cadastro" component={Cadastro} />
     </Stack.Navigator>
   );
@@ -95,11 +94,11 @@ function Routes() {
               <Ionicons
                 name={iconName}
                 size={32}
-                color={focused ? "#FF0000" : "#FFFFFF"}
+                color={focused ? "#B9082C" : "#FFFFFF"}
               />
               <Text
                 style={{
-                  color: focused ? "#FF0000" : "#FFFFFF",
+                  color: focused ? "#B9082C" : "#FFFFFF",
                   paddingTop: 3,
                 }}
               >

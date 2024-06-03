@@ -41,11 +41,6 @@ export default function Login() {
     }
   }
 
-  function deslogar() {
-    auth.signOut();
-    Alert.alert("Logoff", "Deslogado com sucesso!");
-  }
-
   function handleForgotPassword() {
     if (email == "") {
       Alert.alert(
@@ -95,12 +90,26 @@ export default function Login() {
             secureTextEntry={true}
             onChangeText={(senha) => setSenha(senha)}
           ></TextInput>
+          {/* <Text style={styles.text}>
+            Esqueceu a senha?
+            <TouchableOpacity onPress={() => handleForgotPassword()}>
+              <Text 
+                style={[styles.link, { textAlign: "center", marginTop: 5 }]}
+              >Clique aqui!</Text>
+            </TouchableOpacity>
+          </Text> */}
+
           <Text style={styles.text}>
             Esqueceu a senha?
             <TouchableOpacity onPress={() => handleForgotPassword()}>
-              <Text style={styles.link}>Clique aqui!</Text>
+              <Text
+                style={[styles.link,  { textAlign: "center", marginTop: 5 }]}
+              >
+                Clique aqui!
+              </Text>
             </TouchableOpacity>
           </Text>
+
           <TouchableOpacity
             style={styles.button}
             onPress={() => realizarLogin()}
@@ -110,7 +119,7 @@ export default function Login() {
           <Text style={styles.text}>
             Não possui cadastro?
             <TouchableOpacity onPress={() => navigation.navigate("Cadastro")}>
-              <Text style={styles.link}>Cadastre-se!</Text>
+              <Text style={[styles.link,  { textAlign: "center", marginTop: 5 }]}>Cadastre-se!</Text>
             </TouchableOpacity>
           </Text>
         </View>
@@ -169,9 +178,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     fontWeight: "500",
-    lineHeight: 20,
+    textAlign: "center",
+    lineHeight: 20, 
+    textAlignVertical: "bottom",
   },
   link: {
+    fontSize: 14,
+    lineHeight: 20,
     color: "#0000EE",
     textDecorationLine: "underline",
   },

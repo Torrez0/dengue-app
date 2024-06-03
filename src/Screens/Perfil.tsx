@@ -14,7 +14,10 @@ import { PerfilScreenNavigationProp } from "../types/NavigationTypes";
 import { auth, db } from "../config/firebase";
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { buscarInformacoesUsuario } from "../services/requisicoesFirebase";
+import {
+  buscarInformacoesUsuario,
+  excluirContaUsuario,
+} from "../services/requisicoesFirebase";
 import MaskInput, { Masks } from "react-native-mask-input";
 
 export default function Perfil() {
@@ -29,7 +32,8 @@ export default function Perfil() {
       if (informacoesUsuario) {
         const nomeCompleto = informacoesUsuario.nomeCompleto;
         const primeiroNome = nomeCompleto.split(" ")[0]; // Pegando o primeiro nome
-        setNomeUsuario(primeiroNome);
+        // setNomeUsuario(primeiroNome);
+        setNomeUsuario(informacoesUsuario.nomeCompleto);
         setEmailUsuario(informacoesUsuario.email);
         setDataNascimentoUsuario(informacoesUsuario.dataNascimento);
       }
@@ -44,6 +48,29 @@ export default function Perfil() {
     navigation.navigate("Login");
   }
 
+  async function handleExcluirConta() {
+    Alert.alert(
+      "Confirmar Exclusão",
+      "Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.",
+      [
+        { text: "Cancelar" },
+        {
+          text: "Confirmar",
+          onPress: async () => {
+            const result = await excluirContaUsuario();
+            if (result === "Sucesso!") {
+              Alert.alert("Sucesso", "Conta excluída com sucesso!");
+              deslogar();
+            } else {
+              Alert.alert("Erro", "Não foi possível excluir a conta.");
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.welcomeBar}>
@@ -51,14 +78,19 @@ export default function Perfil() {
           source={require("../../assets/dengue-logo.png")}
           style={styles.logo}
         />
-        <Text style={styles.welcomeText}>Olá, {nomeUsuario}! </Text>
+        <Text style={styles.welcomeText}>
+          Olá, {nomeUsuario.split(" ")[0]}!{" "}
+        </Text>
       </View>
       <ScrollView>
         <View style={styles.content}>
           <Text style={styles.title}>Perfil</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, styles.disabledInput]}
             placeholder="Nome do usuário"
+            value={nomeUsuario}
+            editable={false}
+            selectTextOnFocus={false}
           ></TextInput>
           <TextInput
             style={[styles.input, styles.disabledInput]}
@@ -74,16 +106,6 @@ export default function Perfil() {
             editable={false}
             selectTextOnFocus={false}
           />
-          <MaskInput
-            style={styles.input}
-            placeholder="Número de telefone cadastrado"
-            mask={Masks.BRL_PHONE}
-          ></MaskInput>
-          <TextInput
-            style={styles.input}
-            placeholder="Selecione o seu Estado"
-          ></TextInput>
-
           <Text style={styles.text} onPress={deslogar}>
             Sair
           </Text>
@@ -95,7 +117,10 @@ export default function Perfil() {
             <Text style={styles.buttonText}>Suas denúncias</Text>
           </TouchableOpacity>
 
-          <Text style={styles.text}>Excluir conta</Text>
+          <TouchableOpacity
+            onPress={() =>  handleExcluirConta()}>
+            <Text style={styles.text}>Excluir conta</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -118,7 +143,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: "center",
     justifyContent: "center",
-    // paddingTop: 30,
     paddingBottom: 60,
     paddingHorizontal: 20,
   },
