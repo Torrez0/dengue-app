@@ -90,21 +90,10 @@ export default function Login() {
             secureTextEntry={true}
             onChangeText={(senha) => setSenha(senha)}
           ></TextInput>
-          {/* <Text style={styles.text}>
-            Esqueceu a senha?
-            <TouchableOpacity onPress={() => handleForgotPassword()}>
-              <Text 
-                style={[styles.link, { textAlign: "center", marginTop: 5 }]}
-              >Clique aqui!</Text>
-            </TouchableOpacity>
-          </Text> */}
-
           <Text style={styles.text}>
             Esqueceu a senha?
             <TouchableOpacity onPress={() => handleForgotPassword()}>
-              <Text
-                style={[styles.link,  { textAlign: "center", marginTop: 5 }]}
-              >
+              <Text style={[styles.link,  { textAlign: "center", marginTop: 5 }]}>
                 Clique aqui!
               </Text>
             </TouchableOpacity>
